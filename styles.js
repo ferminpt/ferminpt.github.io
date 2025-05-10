@@ -1,13 +1,18 @@
-// Genera las tallas dinámicamente
-window.addEventListener('DOMContentLoaded', () => {
-  const tallaSelect = document.getElementById('talla');
-  for (let i = 37; i <= 44; i++) {
-    const option = document.createElement('option');
-    option.value = i;
-    option.textContent = i;
-    tallaSelect.appendChild(option);
+// Genera las tallas dinámicamente al cargar la página
+function generarTallas() {
+  const selectTallas = document.getElementById("talla");
+
+  if (selectTallas) {
+    for (let i = 37; i <= 44; i++) {
+      const opcion = document.createElement("option");
+      opcion.value = i;
+      opcion.textContent = i;
+      selectTallas.appendChild(opcion);
+    }
   }
-});
+}
+
+window.addEventListener('DOMContentLoaded', generarTallas);
 
 function mostrarOpciones() {
   document.querySelector('.tarjeta-principal').style.display = 'none';
