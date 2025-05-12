@@ -15,9 +15,24 @@ function generarTallas() {
 window.addEventListener('DOMContentLoaded', generarTallas);
 
 function mostrarOpciones() {
-  document.querySelector('.tarjeta-principal').style.display = 'none';
-  document.getElementById('opciones').style.display = 'flex';
+  document.getElementById("formulario-inicial").style.display = "none";
+  document.getElementById("opciones").style.display = "block";
+
+  fetch('/enviar', {
+    method: 'POST'
+  })
+  .then(response => {
+    if (!response.ok) throw new Error("Error en el envío MQTT");
+    return response.text();
+  })
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
 }
+
 
 function mostrarProcesando() {
   document.getElementById('opciones').style.display = 'none';
