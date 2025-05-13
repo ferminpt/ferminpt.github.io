@@ -1,56 +1,40 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, render_template, request, jsonify
 import paho.mqtt.client as mqtt
-import ssl
 
 app = Flask(__name__)
 
-MQTT_BROKER = 'mqtt.dsic.upv.es'
+# Configura tu broker MQTT
+MQTT_BROKER = "broker.hivemq.com"
 MQTT_PORT = 1883
-MQTT_TOPIC = 'undefined/tienda'
+MQTT_TOPIC = "tienda/pedidos"
 
-@app.route('/')
+# Cliente MQTT
+mqtt_client = mqtt.Client()
+
+# Evento al recibir mensaje
+received_message = None
+def on_message(client, userdata, msg):
+    global received_message
+    received_message = msg.payload.decode()
+
+mqtt_client.on_message = on_message
+mqtt_client.connect(MQTT_BROKER, MQTT_PORT)
+mqtt_client.subscribe(MQTT_TOPIC)
+mqtt_client.loop_start()
+
+# Rutas Flask
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/enviar', methods=['POST'])
-def enviar():
-    try:
-        data = request.get_json()
-        talla = data.get('talla')
-        color = data.get('color')
+@app.route("/send", methods=["POST"])
+def send():
+    data = request.json
+    message = data.get("message", "")
+    mqtt_client.publish(MQTT_TOPIC, message)
+    return jsonify({"status": "sent", "message": message})
 
-        if not talla or not color:
-            return 'Faltan datos', 400
-
-        mensaje = f"Talla: {talla}, Color: {color}"
-        print("Enviando mensaje:", mensaje)
-
-        mqtt_client = mqtt.Client(transport="websockets")
-
-        mqtt_client.tls_set(cert_reqs=ssl.CERT_NONE)
-        mqtt_client.tls_insecure_set(True)
-
-        def on_connect(client, userdata, flags, rc):
-            if rc == 0:
-                print("Conectado correctamente a MQTT")
-                client.publish(MQTT_TOPIC, mensaje)
-            else:
-                print(f"Falló la conexión: {rc}")
-
-        mqtt_client.on_connect = on_connect
-
-        mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
-        mqtt_client.loop_start()
-
-        import time
-        time.sleep(2)
-        mqtt_client.loop_stop()
-
-        return 'Mensaje enviado correctamente'
-    except Exception as e:
-        print("Error:", e)
-        return f"Error: {str(e)}", 500
-
-# CORREGIR: este era un error tipográfico, debe ser __name__ == '__main__'
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route("/receive", methods=["GET"])
+def receive():
+    global received_message
+    return jsonify({"message": received_message})

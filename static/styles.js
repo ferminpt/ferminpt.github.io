@@ -63,3 +63,25 @@ function volverAlInicio() {
   document.getElementById("mensaje-final").style.display = "none";
   document.querySelector(".tarjeta-principal").style.display = "flex";
 }
+
+function enviarMensaje() {
+  const mensaje = document.getElementById("mensaje").value;
+  fetch("/send", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ message: mensaje })
+    }).then(res => res.json()).then(data => {
+                  console.log("Enviado:", data);
+              });
+    }
+
+        // Escuchar mensajes entrantes cada 2 segundos
+    setInterval(() => {
+      fetch("/receive").then(res => res.json()).then(data => {
+        if (data.message) {
+          document.getElementById("recibido").innerText = data.message;
+        }
+      });
+    }, 2000);
