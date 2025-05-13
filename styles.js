@@ -15,11 +15,26 @@ function generarTallas() {
 window.addEventListener('DOMContentLoaded', generarTallas);
 
 function mostrarOpciones() {
+  const talla = document.getElementById("talla").value;
+  const color = document.getElementById("color").value;
+
+  // Validación opcional
+  if (!talla || !color) {
+    alert("Por favor selecciona una talla y un color");
+    return;
+  }
+
+  // Ocultar y mostrar sección
   document.getElementById("formulario-inicial").style.display = "none";
   document.getElementById("opciones").style.display = "block";
 
+  // Enviar datos al backend
   fetch('/enviar', {
-    method: 'POST'
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ talla, color })
   })
   .then(response => {
     if (!response.ok) throw new Error("Error en el envío MQTT");
