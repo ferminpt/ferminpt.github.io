@@ -1,0 +1,26 @@
+{
+  "name": "ferminpt.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ferminpt/ferminpt.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ferminpt/ferminpt.github.io/issues"
+  },
+  "homepage": "https://github.com/ferminpt/ferminpt.github.io#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.14.3",
+    "mqtt": "^5.13.0",
+    "pg": "^8.16.0"
+  }
+}
