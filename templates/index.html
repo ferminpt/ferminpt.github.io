@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <title>UNDEFINED</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -28,18 +28,18 @@
 
       <button onclick="mostrarOpciones()">Pedir</button>
     </div>
-    <img src="imagenes/imagencrocss.png" class="crocs">
+    <img src="{{ url_for('static', filename='imagenes/imagencrocss.png') }}" class="crocs">
   </div>
 
   <div class="tarjeta-secundaria" id="opciones" style="display: none;">
     <div class="posicionqr">
-      <img src="imagenes/QR_PáginaWeb.jpeg" alt="QR" class="qr-img">
+      <img src="{{ url_for('static', filename='imagenes/QR_PáginaWeb.jpeg') }}" alt="QR" class="qr-img">
     </div>
     <button onclick="mostrarProcesando()">Auxiliar</button>
   </div>
 
   <div class="mensaje" id="procesando" style="display: none;">
-    <p> Espere un momento, su pedido se está procesando</p>
+    <p>Espere un momento, su pedido se está procesando</p>
   </div>
   
   <div class="tarjeta-principal formulario" id="acciones" style="display: none;">
@@ -53,6 +53,6 @@
     <button onclick="volverAlInicio()">Volver al inicio</button>
   </div>
 
-  <script src="styles.js"></script>
+  <script src="{{ url_for('static', filename='styles.js') }}"></script>
 </body>
 </html>
