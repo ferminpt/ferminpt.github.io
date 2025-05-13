@@ -18,13 +18,7 @@ function mostrarOpciones() {
   const talla = document.getElementById("talla").value;
   const color = document.getElementById("color").value;
 
-  // Validación opcional
-  if (!talla || !color) {
-    alert("Por favor selecciona una talla y un color");
-    return;
-  }
-
-  // Ocultar y mostrar sección
+  // Ocultar formulario y mostrar opciones
   document.getElementById("formulario-inicial").style.display = "none";
   document.getElementById("opciones").style.display = "block";
 
@@ -41,7 +35,7 @@ function mostrarOpciones() {
     return response.text();
   })
   .then(data => {
-    console.log(data);
+    console.log("Respuesta del servidor:", data);
   })
   .catch(error => {
     console.error('Error:', error);
