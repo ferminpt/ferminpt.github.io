@@ -1,12 +1,12 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import paho.mqtt.client as mqtt
 import ssl
+import json
 
-app = Flask(_name_)
+app = Flask(__name__)
 
-# MQTT Config
 MQTT_BROKER = 'mqtt.dsic.upv.es'
-MQTT_PORT = 1883  # WebSocket seguro
+MQTT_PORT = 1883
 MQTT_TOPIC = 'undefined/tienda'
 
 @app.route('/')
@@ -16,13 +16,22 @@ def index():
 @app.route('/enviar', methods=['POST'])
 def enviar():
     try:
-        mensaje = "Hola desde Flask con WebSocket TLS"
-        mqtt_client = mqtt.Client(transport="websockets")
+        data = request.get_json()
+        talla = data.get('talla')
+        color = data.get('color')
 
+        if not talla or not color:
+            return "Datos incompletos", 400
+
+        mensaje = json.dumps({
+            'talla': talla,
+            'color': color
+        })
+
+        mqtt_client = mqtt.Client(transport="websockets")
         mqtt_client.tls_set(cert_reqs=ssl.CERT_NONE)
         mqtt_client.tls_insecure_set(True)
 
-        # Define on_connect callback
         def on_connect(client, userdata, flags, rc):
             if rc == 0:
                 print("Conectado correctamente")
@@ -31,11 +40,9 @@ def enviar():
                 print(f"Falló la conexión: {rc}")
 
         mqtt_client.on_connect = on_connect
-
         mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
         mqtt_client.loop_start()
 
-        # Esperar brevemente para dar tiempo al publish (simple workaround)
         import time
         time.sleep(2)
         mqtt_client.loop_stop()
@@ -44,5 +51,6 @@ def enviar():
     except Exception as e:
         return f"Error: {str(e)}", 500
 
-if _name_ == '_main_':
+
+if __name__ == '__main__':
     app.run(debug=True)
