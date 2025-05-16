@@ -1,0 +1,26 @@
+# Ignorar entorno virtual
+venv/
+
+# Ignorar archivos temporales de Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ignorar archivos de logs
+*.log
+
+# Ignorar archivos de configuración de entorno
+.env
+*.env
+
+# Ignorar archivos de backup de editores
+*.swp
+*.swo
+*~
+
+# VS Code
+.vscode/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
