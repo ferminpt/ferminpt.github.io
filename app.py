@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 MQTT_BROKER = 'mqtt.dsic.upv.es'
 MQTT_PORT = 1883
-MQTT_TOPIC = 'undefined/tienda'
+MQTT_TOPIC = 'tienda/pedidos'
 
 @app.route('/')
 def index():
